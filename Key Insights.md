@@ -34,7 +34,6 @@ TransactionID |	ProductID |	ReferenceOrderID |	ReferenceOrderLineID |	Transactio
 ![Sales Trend](https://github.com/Gemmahhh/Sell-Cheapy-Retail-Analysis-using-SQL/blob/main/images/sales%20trend.JPG)
 
 * From the month of May 2013 they has been a gradual decrease in sales for Sell Cheapy Retail
-* This trend can be seen properly in the dashboard shared in the ReadMe file
 * The question now is, what could be the cause of this decline in sales?
   
 ---
@@ -43,7 +42,7 @@ TransactionID |	ProductID |	ReferenceOrderID |	ReferenceOrderLineID |	Transactio
 
 ### Steps Taken:
   
-* Use the ORDER BY function to display the states provinces and number if customers in a descending order
+* Use the ORDER BY function to display the states provinces and number of customers in a descending order
 * Plot the output on tableau using a barchart
 
 ```sql
@@ -65,68 +64,88 @@ NSW |	3009 |
 ![Top 5 state provinces](https://github.com/Gemmahhh/Sell-Cheapy-Retail-Analysis-using-SQL/blob/main/images/Top%205%20state%20provinces.JPG)
 
 * Sell Cheapy Retail's hottest state province is CALIFORNIA
-* Did anything happen in Carlifonia to possibly change Sell Cheapy Retail's sales trend? 
+* Did anything happen in California to possibly change Sell Cheapy Retail's sales trend? 
   
 ---
   
-### 3. What is the trend of Tax Rate in California over the years? 
+### 3. What has been the trend of Tax Rate in California over the years? 
 
 ### Steps Taken:
   
-* Use the ORDER BY function to display the states provinces and number if customers in a descending order
-* Plot the output on tableau using a barchart
-
+* Use the WHERE function to select only California (Territory ID = 6) 
+* Plot the output on tableau
+	
 ```sql
-SELECT [StateProvinceCode],
-       [number_of_customers]
-  FROM [State_province]
-  ORDER BY [number_of_customers] DESC
-
+  SELECT [OrderDate],
+       [TaxAmt]
+  FROM [Sales].[SalesOrderHeader]
+  WHERE [TerritoryID] = 6
 ```
 ### Output:
-StateProvinceCode |	number_of_customers |
+
+OrderDate |	TaxAmt |
 -- | -- |
-CA | 	5884 |
-BC |	3472 |
-ENG |	3219 |
-WA | 	3042 |
-NSW |	3009 |
+2011-05-31 00:00:00.000 | 3153.7696 |
+2011-05-31 00:00:00.000 | 2775.1646 |
+2011-05-31 00:00:00.000 | 3461.7654 |
+2011-05-31 00:00:00.000 |	587.6023 |
+2011-05-31 00:00:00.000 |	251.9407 |
+2011-05-31 00:00:00.000 |	747.1011 |
+2011-05-31 00:00:00.000 |	125.8032 |
+2011-05-31 00:00:00.000 |	286.2616 |
+2011-06-18 00:00:00.000 |	286.2616 |
   
 ![Top 5 state provinces](https://github.com/Gemmahhh/Sell-Cheapy-Retail-Analysis-using-SQL/blob/main/images/tax%20rate%20in%20CA%20over%20time.JPG)
 
-* Sell Cheapy Retail's hottest state province is CALIFORNIA
-* Did anything happen in Carlifonia to possibly change Sell Cheapy Retail's sales trend? 
-  
+* The tax rate increased drastically in the month of April 2013, just a month before Sell Cheapy Retail's sales began to decline. 
+* Territory ID '6' is California. 
+* This is not the entire output. 
+	
 ---
   
 ### 4. What is the income range of most of Sell Cheapy Retail's customers? 
 
 ### Steps Taken:
   
-* Use the ORDER BY function to display the states provinces and number if customers in a descending order
+* Use the ORDER BY and GROUP BY function to display the Income range of customers in a descending order
 * Plot the output on tableau using a barchart
 
 ```sql
-SELECT [StateProvinceCode],
-       [number_of_customers]
-  FROM [State_province]
-  ORDER BY [number_of_customers] DESC
+    SELECT COUNT ([BusinessEntityID]) AS The_count,
+       [YearlyIncome]
+  FROM [Sales].[vPersonDemographics]
+  GROUP BY YearlyIncome
+  ORDER BY The_count DESC
 
 ```
 ### Output:
-StateProvinceCode |	number_of_customers |
+
+The_count |	YearlyIncome |
 -- | -- |
-CA | 	5884 |
-BC |	3472 |
-ENG |	3219 |
-WA | 	3042 |
-NSW |	3009 |
+5704 |	25001-50000 |
+5476 |	50001-75000 |
+2922 |	0-25000 |
+2755 |	75001-100000 |
+1627 |	greater than 100000 |
+1488 |	NULL |
   
-![Top 5 state provinces](https://github.com/Gemmahhh/Sell-Cheapy-Retail-Analysis-using-SQL/blob/main/images/tax%20rate%20in%20CA%20over%20time.JPG)
+![Customers income](https://github.com/Gemmahhh/Sell-Cheapy-Retail-Analysis-using-SQL/blob/main/images/customer's%20income.JPG)
 
-* Sell Cheapy Retail's hottest state province is CALIFORNIA
-* Did anything happen in Carlifonia to possibly change Sell Cheapy Retail's sales trend?
+* The income range with the highest number of customers is '$25001 - $50000', next followed by '$50001 - $75000'
+* Do customers from these ranges also generate the highest Average Transaction Value? 
 
+---
+	
+### 5. Do customers that earn within '$25000 - $75000' generate the highest Average Transaction Value? 
+
+### Steps Taken:
+  
+* This graph was plotted directly on Tableau using the appropriate table. 
+
+![Customers income](https://github.com/Gemmahhh/Sell-Cheapy-Retail-Analysis-using-SQL/blob/main/images/ATV%20by%20income.JPG)
+
+* Customers that earn within '$25001 - $75000' do not generate the highest amount of ATV. 
+* The largest ATV is generated by those that earn above $100,000
   
   
   
